@@ -1,121 +1,103 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-  <head>
-    <meta charset="utf8"/>
-    
-    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
-    <title>
-      
-        Hello World | Hexo
-      
-    </title>
-    <meta name="description" content=""/>
-    <meta name="keywords" content=""/>
-    
-      <link rel="apple-touch-icon"
-            sizes="180x180"
-            href="/images/apple-touch-icon.png"/>
-    
-    
-      <link rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="/images/favicon-32x32.png"/>
-    
-    
-      <link rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="/images/favicon-16x16.png"/>
-    
-    
-      <link rel="mask-icon"
-            href="/images/logo.svg"
-            color=""/>
-    
-    
-    
-      
-  <style>
-    @font-face {
-        font-family:sourceHanSerif;
-        src: url(/font/normal.ttf);
-        font-weight: normal;
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><meta name="author" content="John Doe"><meta name="renderer" content="webkit"><meta name="copyright" content="John Doe"><meta name="keywords" content="Hexo"><meta name="description" content=""><meta name="Cache-Control" content="no-cache"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><title>Hello World · Mr.Long's Blog</title><link rel="stylesheet" href="/css/style.css?v=2018.7.9"><link rel="stylesheet" href="/css/animation.css?v=2018.7.9"><link rel="icon" href="/img/assets/favicon.ico"><link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css?version=1.5.6"><!-- scripts--><script>(function( w ){
+  "use strict";
+  // rel=preload support test
+  if( !w.loadCSS ){
+    w.loadCSS = function(){};
+  }
+  // define on the loadCSS obj
+  var rp = loadCSS.relpreload = {};
+  // rel=preload feature support test
+  // runs once and returns a function for compat purposes
+  rp.support = (function(){
+    var ret;
+    try {
+      ret = w.document.createElement( "link" ).relList.supports( "preload" );
+    } catch (e) {
+      ret = false;
     }
-  </style>
+    return function(){
+      return ret;
+    };
+  })();
 
-  <style>
-    @font-face {
-        font-family:sourceHanSerif;
-        src: url(/font/bold.ttf);
-        font-weight: bold;
+  // if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+  // then change that media back to its intended value on load
+  rp.bindMediaToggle = function( link ){
+    // remember existing media attr for ultimate state, or default to 'all'
+    var finalMedia = link.media || "all";
+
+    function enableStylesheet(){
+      link.media = finalMedia;
     }
-  </style>
+
+    // bind load handlers to enable media
+    if( link.addEventListener ){
+      link.addEventListener( "load", enableStylesheet );
+    } else if( link.attachEvent ){
+      link.attachEvent( "onload", enableStylesheet );
+    }
+
+    // Set rel and non-applicable media type to start an async request
+    // note: timeout allows this to happen async to let rendering continue in IE
+    setTimeout(function(){
+      link.rel = "stylesheet";
+      link.media = "only x";
+    });
+    // also enable media after 3 seconds,
+    // which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+    setTimeout( enableStylesheet, 3000 );
+  };
+
+  // loop through link elements in DOM
+  rp.poly = function(){
+    // double check this to prevent external calls from running
+    if( rp.support() ){
+      return;
+    }
+    var links = w.document.getElementsByTagName( "link" );
+    for( var i = 0; i < links.length; i++ ){
+      var link = links[ i ];
+      // qualify links to those with rel=preload and as=style attrs
+      if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+        // prevent rerunning on link
+        link.setAttribute( "data-loadcss", true );
+        // bind listeners to toggle media back
+        rp.bindMediaToggle( link );
+      }
+    }
+  };
+
+  // if unsupported, run the polyfill
+  if( !rp.support() ){
+    // run once at least
+    rp.poly();
+
+    // rerun poly on an interval until onload
+    var run = w.setInterval( rp.poly, 500 );
+    if( w.addEventListener ){
+      w.addEventListener( "load", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    } else if( w.attachEvent ){
+      w.attachEvent( "onload", function(){
+        rp.poly();
+        w.clearInterval( run );
+      } );
+    }
+  }
 
 
-    
-    <link rel="stylesheet"
-          type="text/css"
-          href='/css/layout.css'/>
-    
-    
-  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
-  
-
-  <meta name="generator" content="Hexo 7.3.0"></head>
-  <body>
-    
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"/>
-    
-    
-    <div class=head>
-      <div class="nav">
-        <a href='/' class="nav-logo">
-          <img alt="logo" height="60px" width="60px" src="/images/logo.svg"/>
-        </a>
-        <input id="navBtn" type="checkbox"/>
-        <div class="nav-right">
-          
-            <div class="search-outer" id="algolia-search"></div>
-          
-          <div class="nav-menu">
-            
-              
-                <a class="nav-menu-item" href="/feat">特性测试</a>
-              
-                <a class="nav-menu-item" href="/base">基础测试</a>
-              
-            
-            
-              <a class="nav-menu-item" href='/cv/'>简历</a>
-            
-          </div>
-        </div>
-        <label class="nav-btn" for="navBtn"></label>
-      </div>
-    </div>
-    <div class="body">
-      
-  <article class="post-content">
-    <div class="post-inner">
-      <div class="post-content__head">
-        <div class="post-title">Hello World</div>
-        <div class="post-info">
-          
-  
-
-
-          <span class="post-date">2025-11-20</span>
-        </div>
-      </div>
-      
-      <div class="post-content__body">
-        
-          <div class="post-gallery">
-            
-          </div>
-        
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+  // commonjs
+  if( typeof exports !== "undefined" ){
+    exports.loadCSS = loadCSS;
+  }
+  else {
+    w.loadCSS = loadCSS;
+  }
+}( typeof global !== "undefined" ? global : this ) );</script><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" defer></script><script src="/js/main.js?v=2018.7.9" defer></script><!-- fancybox--><link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'"><script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script><!-- busuanzi--><script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script><meta name="generator" content="Hexo 7.3.0"></head><body><section class="profile-close" id="cxo-profile"><div class="profile-avatar"><i class="fa fa-caret-left"></i><img src="/img/assets/cat.png"></div><!--.profile-saying
+  i.fa.fa-comment
+  .saying--><div class="cxo-profile-inner"><div class="profile-name">longlongyu</div><div class="profile-signature">for me</div><div class="friends"><div>FRIENDS</div><span><a href="//github.com/Longlongyu" target="_black">friendA</a></span><span><a href="//github.com/" target="_black">friendB</a></span><span><a href="//github.com/" target="_black">friendC</a></span></div><div class="read-progress"></div></div></section><header id="cxo-intro" style="height: 70vh;background-image: url(/img/intro/index-bg.png);"><nav id="cxo-intro-nav"><section><div class="intro-nav-title"><a href="/">Mr.Long's Blog</a></div><div class="intro-nav-label-box"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div><i class="fa fa-bars intro-nav-menu"><div class="intro-nav-drop"><a href="/">Home</a><a href="/about/">About</a><a href="/archives/">Archives</a><a href="/tags/">Tags</a></div></i><div class="clear"></div></section></nav><h1 class="post-title">Hello World</h1><div class="post-intros"><div class="post-intro-meta"><span class="post-intro-time"><i class="post-intro-calendar fa fa-calendar"></i><span>2025-11-20</span></span></div></div></header><article class="cxo-up" id="cxo-content-outer"><section id="cxo-content-inner"><article class="article-entry" id="post"><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
@@ -128,264 +110,4 @@
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      </div>
-    </div>
-    
-      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
-      <script>
-        if (window.mermaid) {
-          mermaid.initialize({"startOnload":true});
-        }
-      </script>
-    
-  </article>
-  <div class="post__foot">
-    
-      <div class="like-author">
-  <input type="checkbox" id="likeCode" />
-  <div class="author-face">
-    <img height="100px"
-         width="100px"
-         id="front-face"
-         alt="author face"
-         src="/assets/author-face.jpg" />
-    <img height="100px"
-         width="100px"
-         id="back-face"
-         alt="like code"
-         src="/assets/pay-code.jpg" />
-  </div>
-  <div class="like-text">“给作者倒杯卡布奇诺”</div>
-  <label for="likeCode" class="like-btn">
-    <svg viewBox="0 0 1024 1024"
-         width="20px"
-         style="margin-right: 10px"
-         height="20px">
-      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
-    </svg>
-    喜欢作者
-  </label>
-</div>
-
-    
-    <div class="post-nav">
-  
-    <div class="post-nav-item-left"></div>
-  
-  <div class="vhr"></div>
-  
-    <div class="post-nav-item-right"></div>
-  
-</div>
-
-    
-      <div class="related-post">
-  <div class="related__head">
-  
-
-</div>
-  <div class="realated__body">
-    
-      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
-    
-  </div>
-</div>
-
-    
-    
-  </div>
-
-    </div>
-    <div class="foot">
-  <div class="foot-inner">
-    <div class="foot__head">
-      
-        <div class="foot-line">
-          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
-        </div>
-      
-        <div class="foot-line">
-          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
-        </div>
-      
-    </div>
-    <div class="foot__body">
-      
-        <div class="foot-item">
-          <div class="foot-item__head">朋友</div>
-          <div class="foot-item__body">
-            
-            
-
-
-  
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">Theme Tranquility</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://hozen.site">浩然的主页</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:example@email.com?subject=申请https://zc-0572.github.io的友链">申请友链</a>
-          </div>
-        
-      
-        
-        
-      
-    </div>
-  
-
-
-          </div>
-        </div>
-      
-      
-        <div class="foot-item">
-          <div class="foot-item__head">账号</div>
-          <div class="foot-item__body">
-            
-
-
-  
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/logo-github.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/logo-wx.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/logo-zh.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
-          </div>
-        
-      
-        
-        
-      
-    </div>
-  
-
-
-          </div>
-        </div>
-      
-      <div class="foot-item">
-        <div class="foot-item__head">联系</div>
-        <div class="foot-item__body">
-          
-
-
-  
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-email.svg" />
-            <a class="foot-link" href="mailto:name@example.com">name@example.com</a>
-          </div>
-        
-      
-        
-        
-      
-        
-        
-      
-        
-        
-      
-    </div>
-  
-
-
-        </div>
-      </div>
-    </div>
-    <div class="copyright">
-      <a href="https://zc-0572.github.io">Hexo</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
-      <svg width="20" height="20" viewBox="0 0 725 725">
-        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
-        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
-        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
-      </svg>
-      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
-    </div>
-  </div>
-</div>
-
-    
-    
-      <script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
-      <script type="text/javascript">
-        docsearch({
-          appId: 'appId',
-          apiKey: 'apiKey',
-          indexName: 'indexName',
-          insights: 'true',
-          container: 'div#algolia-search',
-          debug: 'false'
-        });
-      </script>
-    
-    <script src="/js/copy-code.js"></script>
-    
-  
-
-  </body>
-</html>
+</article><!-- lincense--><div class="license-wrapper"><p> <span>Author:  </span><a href="https://zc-0572.github.io">John Doe</a></p><p> <span>Link:  </span><a href="https://zc-0572.github.io/2025/11/20/hello-world/">https://zc-0572.github.io/2025/11/20/hello-world/</a></p><p> <span>Copyright:  </span><span>All articles in this blog are licensed under <a rel="license noopener" target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/3.0">CC BY-NC-SA 3.0</a> unless stating additionally.</span></p></div><div class="post-paginator"><a class="prevSlogan" href="/2025/11/21/blog/" title="blog"><span>< PreviousPost</span><br><span class="prevTitle">blog</span></a><div class="clear"></div></div><div id="comment"></div></section></article><footer id="cxo-footer-outer"><div id="cxo-footer-inner"><p class="footer-container"><span>Site by </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span> | theme </span><a target="_blank" rel="noopener" href="https://github.com/Longlongyu/hexo-theme-Cxo"><span>Cxo</span></a></p><i class="fa fa-user"> </i><span id="busuanzi_value_site_uv"></span><span> | </span><i class="fa fa-eye"> </i><span id="busuanzi_value_site_pv"></span></div></footer><!-- catelog--><div class="toc-wrapper" style="top: 70vh;"><div class="toc-catalog"><i class="fa fa-list"> </i><span>CATALOG</span></div><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol></div><!-- top--><i class="fa fa-arrow-up close" id="go-up" aria-hidden="true"></i></body></html>
